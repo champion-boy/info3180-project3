@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+
+{% block js %}
+{% endblock %}
+
+
+{% block main %}
+<ul>
+{% for profile in profiles %}
+<li>
+<a href="/profile/{{profile.id}}">
+{{profile.first_name}}
+{{profile.last_name}}
+</a>
+</li>
+
+{% endfor %}
+</ul>
+
+</form> 
+{% endblock %}
