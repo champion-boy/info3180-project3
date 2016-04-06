@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block js %}
+{% endblock %}
+
+
+{% block main %}
+<form action="{{ url_for('profile_add') }}" method="post">
+
+       first name: {{ form.first_name }}<br />
+       last_name: {{ form.last_name }}<br />    
+       <input type="submit" />                
+
+</form> 
+{% endblock %}

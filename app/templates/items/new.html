@@ -1,0 +1,21 @@
+<h1>New Items</h1>
+
+<div>
+	<md-input-container flex-gt-sm>
+		<label>Name</label>
+		<input ng-model="item.name" required md-maxlength="30">
+		<div ng-messages="itemForm.name.$error">
+			<div ng-message="required" class="my-message"></div>
+			<div ng-message="md-maxlength" class="my-message">less than 30 characters</div>
+		</div>
+	</md-input-container>
+	<md-input-container class="md-block">
+		<label>Description</label>
+		<textarea ng-model="item.description" md-maxlength="200" rows="7" md-select-on-focus></textarea>
+		<div ng-messages="itemForm.description.$error">
+			<div ng-message="md-maxlength">Failure to follow instruction</div>
+		</div>
+	</md-input-container>
+	<small>{{ error }}</small>
+	<md-button ng-click="saveItem(item)" class="md-raised"></md-button>
+</div>

@@ -1,0 +1,26 @@
+<h1>All wishlist</h1>
+<h3>Champion Boy</h3>
+
+<md-list ng-cloak>
+	<md-subheader class="md-no-sticky">Check</md-subheader>
+	<md-list-item ng-repeat="wishlist in wishlists" ng-click="goToWishlist(wishlist.name, $event)" 
+	class="noright" ui-sref="wishlists_show({userId: userId, wishlistName: wishlist.name})">
+		<div class="md-list-item-text" layout="column">
+			<h3>{{ wishlist.name }}</h3>
+			<p>{{ wishlist.description }}</p>
+		</div>
+		<md-checkbox class="md-secondary" ng-model="wishlist.selected"></md-checkbox>
+	</md-list-item>
+</md-list>
+
+
+<div class="lock-size" layout="row" layout-align="center center">
+	<md-fab-speed-dial md-open="demo.isOpen" ng-class="demo.selectedMode">
+		<md-fab-trigger>
+			<md-button aria-label="add" class="md-fab md-warn" ng-click="createWishlist()">
+				<md-icon md-svg-src="img/icons/ic_add_white_24px.svg"></md-icon>
+			</md-button>
+		</md-fab-trigger>
+		
+	</md-fab-speed-dial>
+</div>

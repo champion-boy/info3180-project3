@@ -1,0 +1,24 @@
+<html>
+
+    <head>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script>
+
+      /*global$ */  $.getJSON('/profiles',
+
+            function(data){alert(data);});
+
+    </script>
+    </head>
+
+    <body>
+<h1>
+	All users
+</h1>
+
+<ul>
+	<li ng-repeat="user in users">
+		{{ user.first_name }} {{ user.last_name }}, {{ user.email }}
+	</li>
+</ul>
