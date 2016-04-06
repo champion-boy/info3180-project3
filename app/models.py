@@ -2,6 +2,14 @@ from app import db, app
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
+from uuid import uuid4
+from datetime import datetime, timedelta
+
+items = db.Table('item_wishlist',
+	db.Column('item_id', db.Integer, db.ForeignKey('item.id')),
+	db.Column('wishlist_id', db.Integer, db.ForeignKey('wishlist.id')),
+	db.Column('status', db.String(20))
+)
 
 class User(db.Model):
     id              = db.Column(db.Integer, primary_key = True)
@@ -59,7 +67,27 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.email
         
-        
+class Item(db.Model):
+	id = db.Column(db.Integer,primary_key=True)
+	name = db.Column(db.String(80))
+	description = db.Column(db.String(500))
+	thumbnail = db.Column(db.String(500))
+	wishlist_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+	def __init__(self, name, description=None):
+		self.name = name
+
+		if description is not None:
+			self.description = description
+
+	def __repr__(self):
+		return {
+			'id': self.id,
+			'name': self.name,
+			'description': self.description,
+			'thumbnail': self.thumbnail,
+			'wishlist_id': self.wishlist_id
+		}        
 class Wishlist(db.Model):
     id              = db.Column(db.Integer, primary_key = True)
     userid          = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -83,3 +111,54 @@ class Profile(db.Model):
 
     def __repr__(self):
         return'<Profile %r>' % self.username
+        
+class Myprofile(db.Model):     
+    id = db.Column(db.Integer, primary_key=True)     
+    first_name = db.Column(db.String(80))     
+    last_name = db.Column(db.String(80)) 
+    username = db.Column(db.String(80), unique=True) 
+    password = db.Column(db.String(80), unique=True)     
+    
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        try:
+            return unicode(self.id)  # python 2 support
+        except NameError:
+            return str(self.id)  # python 3 support
+
+    def __repr__(self):
+        return '<User %r>' % (self.username)
+class AuthToken(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	token = db.Column(db.String(200), unique=True)
+	created_at = db.Column(db.DateTime())
+	expire_at = db.Column(db.DateTime())
+
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+	def __init__(self, days=60):
+		self.token = uuid4().hex
+		self.created_at = datetime.utcnow()
+		self.expire_at = self.created_at + timedelta(days=days)
+
+	def get_token():
+		return self.token
+
+	def get_user_id():
+		return self.user_id
+
+	def __repr__(self):
+		return {
+			'token': self.token,
+			'expire_at': self.expire_at,
+			'created_at': self.created_at,
+			'user_id': self.user_id
+		}

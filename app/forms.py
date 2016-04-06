@@ -1,11 +1,12 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, RadioField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, RadioField, TextField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo, Optional, NumberRange
 from wtforms.fields.html5 import IntegerField
 from wtforms import ValidationError
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from app.models import User, Profile
 from app import db
+from wtforms.validators import DataRequired
 
 
 class RegistrationForm(Form):
@@ -18,10 +19,8 @@ class RegistrationForm(Form):
             raise ValidationError('Email already registered.')
 
 class LoginForm(Form):
-    email       = StringField('Email',              validators=[Required(), Length(1, 64), Email()])
-    password    = PasswordField('Password',         validators=[Required()])
-    remember_me = BooleanField('Keep me logged in')
-
+    openid = StringField('openid', validators=[DataRequired()])
+    remember_me = BooleanField('remember_me', default=False)
     
 class ItemForm(Form):
     itemUrl     = StringField('Url',                validators=[Required()])
@@ -44,6 +43,16 @@ class UserProfileForm(Form):
     age         = IntegerField('Age',              validators=[Required(),NumberRange(min=0, max=100)])
     img         = FileField('Image',               validators=[FileRequired(),FileAllowed(['jpg', 'png'], 'Images only!')])
     
-    def validate_username(self, field):
-        if db.session.query(Profile).filter(Profile.username == field.data).first():
-            raise ValidationError('Username already in use.')
+class WishlistForm(Form):
+	name = TextField('name', validators=[Required()])
+	description = TextAreaField('description')
+
+
+	
+	def validate_username(self, field):
+	    if db.session.query(Profile).filter(Profile.username == field.data).first():
+	        raise ValidationError('Username already in use.')
+            
+
+
+
