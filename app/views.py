@@ -41,7 +41,7 @@ def home():
 
     
 @oid.loginhandler
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/api/login', methods=['GET', 'POST'])
 """Logs in user"""
 def login():
     form = LoginForm()
@@ -79,7 +79,7 @@ def add_item(id):
     return render_template('login.html')
     
     
-@app.route('/:id/wishlist', methods=['GET'])
+@app.route('/api/:id/wishlist', methods=['GET'])
 def get_wishlist(id):
     return
 
@@ -92,7 +92,7 @@ def processThumbnail():
     return jsonify(thumbnailer.get_data(url))
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/api/register', methods=['POST'])
 def register():
 	data = MultiDict(mapping=request.json)	
 	inputs = RegistrationForm(data, csrf_enabled=False)
